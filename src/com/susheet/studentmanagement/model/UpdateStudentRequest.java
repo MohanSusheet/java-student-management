@@ -7,32 +7,12 @@ public class UpdateStudentRequest {
     private Department department;
     private Double cgpa;
 
-    private static final int MIN_NAME_LEN = 2;
-    private static final int MAX_NAME_LEN = 50;
-    private static final int MIN_AGE = 18;
-    private static final int MAX_AGE = 60;
-    private static final double MIN_CGPA = 0;
-    private static final double MAX_CGPA = 10;
-
     public UpdateStudentRequest(String name, Integer age, Double cgpa, Department department)
     {
-        //Validations
-        if(name != null)
-        {
-            if(!validateName(name)) throw new IllegalArgumentException("Name to be update must be 1-50 characters long.");
-        }
-        if(age != null)
-        {
-            if(!validateAge(age)) throw new IllegalArgumentException("Age is invalid. Age must be between 18-60 years.");
-        }
-        if(cgpa != null)
-        {
-            if(!validateCgpa(cgpa)) throw new IllegalArgumentException("Age is invalid. Age must be between 18-60 years.");
-        }
-        this.name = name;
-        this.age = age;
-        this.cgpa = cgpa;
-        this.department = department;
+        setName(name);
+        setAge(age);
+        setCgpa(cgpa);
+        setDepartment(department);
     }
 
     public String getName() {
@@ -40,6 +20,14 @@ public class UpdateStudentRequest {
     }
 
     public void setName(String name) {
+        if(name == null)
+        {
+            return;
+        }
+        if(!isNameValid(name))
+        {
+            throw new IllegalArgumentException("Name to be updated must be 1-50 characters long.");
+        }
         this.name = name;
     }
 
@@ -48,6 +36,14 @@ public class UpdateStudentRequest {
     }
 
     public void setAge(Integer age) {
+        if(age == null)
+        {
+            return;
+        }
+        if(!isAgeValid(age))
+        {
+            throw new IllegalArgumentException("Age is invalid. Age must be between 18-60 years.");
+        }
         this.age = age;
     }
 
@@ -56,6 +52,10 @@ public class UpdateStudentRequest {
     }
 
     public void setDepartment(Department department) {
+        if(department == null) {
+            return; //optional field in update request
+//            throw new IllegalArgumentException("Department cannot be empty.");
+        }
         this.department = department;
     }
 
@@ -64,20 +64,29 @@ public class UpdateStudentRequest {
     }
 
     public void setCgpa(Double cgpa) {
+        if(cgpa == null)
+        {
+            return;
+        }
+        if(!isCgpaValid(cgpa))
+        {
+            throw new IllegalArgumentException("CGPA is invalid. CGPA must be between 0-10.");
+        }
+
         this.cgpa = cgpa;
     }
 
-    //validation methods.
-    public boolean validateName(String name)
+    //validation methods. "private static" as these methods are independent of object's state.
+    private static boolean isNameValid(String name)
     {
-        return name.length() < MIN_NAME_LEN || name.length() > MAX_NAME_LEN;
+        return name.length() >= AppConstants.MIN_NAME_LEN && name.length() <= AppConstants.MAX_NAME_LEN;
     }
-    public boolean validateAge(Integer age)
+    private static boolean isAgeValid(Integer age)
     {
-        return age < MIN_AGE || age > MAX_AGE;
+        return age >= AppConstants.MIN_AGE && age <= AppConstants.MAX_AGE;
     }
-    public boolean validateCgpa(Double cgpa)
+    private static boolean isCgpaValid(Double cgpa)
     {
-        return cgpa < MIN_CGPA || cgpa > MAX_CGPA;
+        return cgpa >= AppConstants.MIN_CGPA && cgpa <= AppConstants.MAX_CGPA;
     }
 }

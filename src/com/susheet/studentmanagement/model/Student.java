@@ -1,5 +1,4 @@
 package com.susheet.studentmanagement.model;
-
 import java.util.Objects;
 
 public class Student {
@@ -8,39 +7,15 @@ public class Student {
     private String name;
     private int age;
     private Department department;
-    private Double cgpa;
-
-    //Validation constants
-    private static final int MIN_AGE = 18;
-    private static final int MAX_AGE = 60;
-    private static final double MIN_CGPA = 0;
-    private static final double MAX_CGPA = 10;
+    private double cgpa;
 
     //public Student() {} //empty constructor not required as per requirements
 
     public Student(Long id, String name, int age, double cgpa, Department department) //without "throws" as IllegalArgumentException is Unchecked exception
     {
+        if(id == null) throw new IllegalArgumentException("Student Id cannot be null");
         this.id = id;
-//        if(name == null || name.isBlank())
-//        {
-//            throw new IllegalArgumentException("Name is invalid.");
-//        }
-//        if(age < MIN_AGE || age > MAX_AGE)
-//        {
-//            throw new IllegalArgumentException("Age is invalid. Age must be between 18-60 years.");
-//        }
-//        if(cgpa < MIN_CGPA || cgpa > MAX_CGPA)
-//        {
-//            throw new IllegalArgumentException("CGPA is invalid. CGPA must be between 0-10.");
-//        }
-//        if(department == null)
-//        {
-//            throw new IllegalArgumentException("Department is mandatory.");
-//        }
-//        this.name = name;
-//        this.age = age;
-//        this.cgpa = cgpa;
-//        this.department = department;
+
         //using SETTERS to initialize the values and Setters contain the validations.
         //Hence, we have centralized validation logic.
         setName(name);
@@ -74,7 +49,7 @@ public class Student {
     }
 
     public void setAge(int age) {
-        if(age < MIN_AGE || age > MAX_AGE)
+        if(age < AppConstants.MIN_AGE || age > AppConstants.MAX_AGE)
         {
             throw new IllegalArgumentException("Age is invalid. Age must be between 18-60 years.");
         }
@@ -97,7 +72,7 @@ public class Student {
     }
 
     public void setCgpa(double cgpa) {
-        if(cgpa < MIN_CGPA || cgpa > MAX_CGPA)
+        if(cgpa < AppConstants.MIN_CGPA || cgpa > AppConstants.MAX_CGPA)
         {
             throw new IllegalArgumentException("CGPA is invalid. CGPA must be between 0-10.");
         }
